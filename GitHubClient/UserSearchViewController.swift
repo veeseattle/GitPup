@@ -50,6 +50,7 @@ class UserSearchViewController: UIViewController, UICollectionViewDelegate, UICo
     })
   }
 
+  //MARK: collectionView dataSource
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return self.users.count
   }

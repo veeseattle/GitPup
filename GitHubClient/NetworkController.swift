@@ -10,11 +10,6 @@ import UIKit
 
 class NetworkController {
   
-//  class var sharedInstance : NetworkController {
-//    struct Static {
-//      
-//    }
-//  }
   var urlSession : NSURLSession
   let clientID = "a31f1ccc91fce73d5c22"
   let clientSecret = "08361906f1d3ab0fe25689faf28a6ddf473597b0"
@@ -35,7 +30,6 @@ class NetworkController {
   
   func fetchAccessToken() {
     let url = NSURL(string: "https://github.com/login/oauth/authorize?client_id=\(self.clientID)&scope=user,repo")
-    //var request = NSURLRequest(URL: url!)
     //redirects user to the service provider by opening GitHub
     UIApplication.sharedApplication().openURL(url!)
   }
@@ -48,7 +42,6 @@ class NetworkController {
     let oauthURL = NSURL(string: "https://github.com/login/oauth/access_token?client_id=\(self.clientID)&client_secret=\(self.clientSecret)&code=\(code!)")
     let oauthRequest = NSMutableURLRequest(URL: oauthURL!)
     oauthRequest.HTTPMethod = "POST"
-    //now what?
     
     let dataTask = self.urlSession.dataTaskWithRequest(oauthRequest, completionHandler: { (data, response, error) -> Void in
       if error == nil {
@@ -61,6 +54,8 @@ class NetworkController {
             let accessToken = tokenResponseFirst.componentsSeparatedByString("&").first
             NSUserDefaults.standardUserDefaults().setObject(accessToken, forKey: self.accessTokenUserDefaultsKey)
             NSUserDefaults.standardUserDefaults().synchronize()
+          case 400...499:
+            println("An error has happened. Status code: \(httpResponse.statusCode)")
           default:
             println("Default case fired")
           }}
@@ -192,7 +187,4 @@ class NetworkController {
         println("Meow mix: something went wrong!")
       }})
     userDataTask.resume()
-  }
-  
-
-}
+  }}
